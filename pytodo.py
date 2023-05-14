@@ -4,6 +4,8 @@
 # reprioritize
 # deprioritize
 # list
+import sys
+
 todo_file_location = "/home/sininenblue/.config/pytodo/"
 todo_file = f"{todo_file_location}todo.txt"
 
@@ -66,4 +68,21 @@ def deprioritize_task(task_index):
     with open(todo_file, "w") as file:
         file.writelines(all_tasks)
 
-list_tasks()
+
+match sys.argv[1]:
+    case "list":
+        list_tasks()
+    case "add":
+        if len(sys.argv) == 4:
+            add_task(sys.argv[2], int(sys.argv[3]))
+        else:
+            add_task(sys.argv[2])
+    case "done":
+        done_task()
+    case "prio":
+        prioritize_task(int(sys.argv[2]))
+    case "deprio":
+        deprioritize_task(int(sys.argv[2]))
+    case _:
+        print("not a valid command")
+
