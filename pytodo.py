@@ -4,7 +4,8 @@
 # reprioritize
 # deprioritize
 # list
-todo_file = "todo.txt"
+todo_file_location = "/home/sininenblue/.config/pytodo/"
+todo_file = f"{todo_file_location}todo.txt"
 
 def get_all_tasks():
     all_tasks = []
@@ -13,6 +14,17 @@ def get_all_tasks():
         all_tasks = file.readlines()
 
     return all_tasks
+
+def list_tasks():
+    all_tasks = get_all_tasks()
+    
+    task_index = 1
+    for task in all_tasks:
+        task = task.strip("\n")
+        print(f"{task_index} {task}")
+
+        task_index += 1
+
 
 def add_task(task, index = -1):
     if index == -1:
@@ -30,7 +42,28 @@ def add_task(task, index = -1):
 
 def done_task():
     all_tasks = get_all_tasks()
+    all_tasks.pop(0)
 
-add_task("testing2")
+    file = open(todo_file, "w")
+    file.writelines(all_tasks)
+    file.close()
 
+def prioritize_task(task_index):
+    if task_index == 1:
+        print("can't prioritize task")
+        return
 
+    all_tasks = get_all_tasks()
+    all_tasks.insert(0, all_tasks.pop(task_index - 1))
+
+    with open(todo_file, "w") as file:
+        file.writelines(all_tasks)
+
+def deprioritize_task(task_index):
+    all_tasks = get_all_tasks()
+    all_tasks.append(all_tasks.pop(task_index - 1))
+
+    with open(todo_file, "w") as file:
+        file.writelines(all_tasks)
+
+list_tasks()
